@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { View, TextInput, Text, StyleSheet, Image, StatusBar, Button } from 'react-native';
 import {TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { StackActions } from '@react-navigation/native';
 
 
 
@@ -56,7 +55,6 @@ const ProfileScreen = ({ navigation, route }) => {
   };
 
 
-
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
@@ -84,10 +82,8 @@ const ProfileScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={async () => {
-            // Clear the logged-in user data from AsyncStorage
             await AsyncStorage.removeItem('loggedInUserEmail');
 
-            // Reset the navigation stack and navigate to the Login screen
             navigation.reset({
               index: 0,
               routes: [{ name: 'Login' }],

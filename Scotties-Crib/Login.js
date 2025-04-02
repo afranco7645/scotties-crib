@@ -21,7 +21,14 @@ const LoginScreen = ({ navigation, route }) => {
   const showAsyncStorage = async () => {
     try {
       const storedUsersJson = await AsyncStorage.getItem('users');
-      console.log(storedUsersJson)
+      if (storedUsersJson) {
+        const storedUsers = JSON.parse(storedUsersJson);
+        const simplifiedUsers = storedUsers.map(user => ({
+          ...user,
+          image: user.image ? 'image' : null,
+        }));
+        console.log(JSON.stringify(simplifiedUsers, null, 2))
+      }
     }
     catch (error) {
       console.error('Error showing Async Storage:', error);
