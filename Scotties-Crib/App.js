@@ -1,16 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './Login';
 import SignupScreen from './Signup';
 import HomeScreen from './Home';
-import { globalStyles } from './styles';
-
 import Profile from './Profile'
 import EditProfile from './EditProfile'
-import AddItem from './AddItem';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import NavBar from './NavBar';
@@ -76,21 +71,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-
-// const HomeWithNavBar = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen 
-//         name="Home" 
-//         component={HomeScreen}
-//         options={{ headerShown: false }}
-//       />
-//       <Stack.Screen 
-//         name="Main" 
-//         component={NavBar}
-//         options={{ headerShown: false }}
-//       />
-//     </Stack.Navigator>
-//   );
-// };

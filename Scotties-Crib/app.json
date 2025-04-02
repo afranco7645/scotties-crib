@@ -16,14 +16,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.cactus.scottiesCrib"
+      "bundleIdentifier": "com.cactus.scottiesCrib",
+      "newArchEnabled": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0b2138"
       },
-      "package": "com.cactus.scottiesCrib"
+      "package": "com.cactus.scottiesCrib",
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

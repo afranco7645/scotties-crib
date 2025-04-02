@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, Button, Alert } from 'react-native';
-import { globalStyles } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

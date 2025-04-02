@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, KeyboardAvoidingView, Platform, Alert} from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, KeyboardAvoidingView, Platform, Alert, Touchable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const SignupScreen = ({ navigation, route }) => {
+const SignupScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
   const handleSignup = async () => {
     try {
       // Simulate basic email validation
@@ -60,11 +63,6 @@ const SignupScreen = ({ navigation, route }) => {
     }
   };
 
-  const navigateToLogin = () => {
-    // Navigate to the Sign Up screen here
-    console.log('Navigate to Login');
-    navigation.navigate('Login', {name: 'Login'});
-  };
 
 
   return (
@@ -82,19 +80,25 @@ const SignupScreen = ({ navigation, route }) => {
         keyboardType="email-address"
         autoCapitalize='none'
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#97c4e1"
-        onChangeText={text => setPassword(text)}
-        value={password}
-        secureTextEntry={true}
-        autoCapitalize='none'
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password"
+          placeholderTextColor="#97c4e1"
+          onChangeText={text => setPassword(text)}
+          value={password}
+          secureTextEntry={!showPassword}
+          autoCapitalize='none'
+        />
+        <TouchableOpacity onPress={toggleShowPassword} style={styles.showButton}>
+          <Text style={styles.showButtonText}>{showPassword ? 'Hide' : 'Show'}</Text>
+        </TouchableOpacity>
+      </View>
+      
       <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.goBack()}>
         <Text style={styles.loginButtonText}>Back to Login</Text>
       </TouchableOpacity>
     </View>
@@ -123,8 +127,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginBottom: 20,
-    width: 250, // Set your logo width
-    height: 250, // Set your logo height
+    width: 250,
+    height: 250,
   },
   input: {
     width: '80%',
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     color: 'white',
     fontSize: 36,
-    marginBottom: 20, // Adjusted for spacing
+    marginBottom: 20, 
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -159,6 +163,26 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: '#97c4e1',
     fontSize: 16,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  passwordInput: {
+    flex: 1, // Take up all available space
+    padding: 15,
+    color: '#0b2138',
+  },
+  showButton: {
+    paddingHorizontal: 10, // Add some padding for the button
+  },
+  showButtonText: {
+    color: '#97c4e1',
+    fontWeight: 'bold',
   },
 });
 
