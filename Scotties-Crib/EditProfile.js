@@ -1,43 +1,31 @@
-import React, {useState, useEffect} from 'react'
-import { View, Text, StyleSheet, TextInput, Button} from "react-native";
-import { globalStyles } from "./styles";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
-const EditProfile = ({navigation}) => {
+const EditProfile = ({ navigation }) => {
   const [name, setName] = useState('');
   const [year, setYear] = useState('');
   const [major, setMajor] = useState('');
   const [bio, setBio] = useState('');
-
-
-
-
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        // Retrieve the currently logged-in user's email from AsyncStorage
         const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
-        
-        // Retrieve the list of users from AsyncStorage
         const usersJson = await AsyncStorage.getItem('users');
         const users = usersJson ? JSON.parse(usersJson) : [];
-  
-        // Find the user with the matching email
         const currentUser = users.find(user => user.email === loggedInUserEmail);
-  
+
         if (currentUser) {
-          // Set profile data based on the current user's information
           setName(currentUser.name || '');
           setYear(currentUser.year || '');
           setMajor(currentUser.major || '');
           setBio(currentUser.bio || '');
+          setImage(currentUser.image || null);
         } else {
           console.log('User not found');
-          // Handle case where the user is not found (e.g., show an error message)
         }
       } catch (error) {
         console.error('Error loading profile data:', error);
@@ -45,169 +33,179 @@ const EditProfile = ({navigation}) => {
     };
 
     loadProfileData();
-  }, []); // Empty dependency array to run the effect only once on mount
+  }, []);
 
-  
   const saveProfile = async () => {
     try {
-      // Retrieve the existing users from AsyncStorage
       const existingUsersJson = await AsyncStorage.getItem('users');
       const existingUsers = existingUsersJson ? JSON.parse(existingUsersJson) : [];
-      
-      // Retrieve the currently logged-in user's email from AsyncStorage
       const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
-      console.log(loggedInUserEmail)
-  
-      // Find the index of the logged-in user in the existing users array
+
       const userIndex = existingUsers.findIndex(user => user.email === loggedInUserEmail);
       if (userIndex !== -1) {
-        // Update the user's profile data
         existingUsers[userIndex].name = name;
         existingUsers[userIndex].year = year;
         existingUsers[userIndex].major = major;
         existingUsers[userIndex].bio = bio;
-        // console.log(name)
-        // console.log(year)
-        // console.log(major)
-        // console.log(bio)
-        // console.log(existingUsers[userIndex])
-        // Save the updated users array back to AsyncStorage
+        existingUsers[userIndex].image = image;
+
         await AsyncStorage.setItem('users', JSON.stringify(existingUsers));
-  
         console.log('Profile data saved successfully.');
-  
-        // Navigate back to the Profile screen
-        navigation.navigate('Profile');
+        navigation.goBack();
       } else {
         console.log('Logged-in user not found in AsyncStorage.');
-        // Handle case where logged-in user is not found
       }
     } catch (error) {
       console.error('Error saving profile data:', error);
-      // Handle error while saving profile data
     }
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
+    console.log('Image picker result:', result);
 
-
-
-  
-    return (
-        <View style={styles.container}>
-            <View style={styles.bar}>
-
-            </View>
-            
-            <View style={styles.inputContainer}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                style={styles.input}
-                value={name}
-                onChangeText={setName}
-                placeholder="Name"
-                placeholderTextColor="#A9A9A9"
-                />
-              </View>
-              <View style={styles.inputLine} />
-            </View>
-  
-            <View style={styles.inputContainer}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                style={styles.input}
-                value={year}
-                onChangeText={setYear}
-                placeholder="Year"
-                placeholderTextColor="#A9A9A9"
-                />
-              </View>
-              <View style={styles.inputLine} />
-            </View>
-  
-            <View style={styles.inputContainer}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                style={styles.input}
-                value={major}
-                onChangeText={setMajor}
-                placeholder="Major"
-                placeholderTextColor="#A9A9A9"
-                />
-              </View>
-              <View style={styles.inputLine} />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                style={styles.input}
-                value={bio}
-                onChangeText={setBio}
-                placeholder="Type up your bio here!"
-                placeholderTextColor="#A9A9A9"
-                />
-              </View>
-              <View style={styles.inputLine} />
-            </View>
-
-            <TouchableOpacity style={styles.button} onPress={saveProfile}>
-                <Button title="Save"/>
-            </TouchableOpacity>
-      </View>
-    );
+    if (!result.cancelled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
-export default EditProfile
+  return (
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex:1}}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Edit Profile</Text>
 
+        {/* Profile Image */}
+        <TouchableOpacity onPress={pickImage}>
+          <View style={styles.circle}>
+            <Image
+              source={image === null ? require('./assets/grey_person.jpg') : { uri: image }}
+              style={styles.image}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="Enter your name"
+            placeholderTextColor="#A9A9A9"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Year</Text>
+          <TextInput
+            style={styles.input}
+            value={year}
+            onChangeText={setYear}
+            placeholder="Enter your year"
+            placeholderTextColor="#A9A9A9"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Major</Text>
+          <TextInput
+            style={styles.input}
+            value={major}
+            onChangeText={setMajor}
+            placeholder="Enter your major"
+            placeholderTextColor="#A9A9A9"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Bio</Text>
+          <TextInput
+            style={[styles.input, styles.bioInput]}
+            value={bio}
+            onChangeText={setBio}
+            placeholder="Write your bio here"
+            placeholderTextColor="#A9A9A9"
+            multiline
+          />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={saveProfile}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+export default EditProfile;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        backgroundColor: '#0b2138',
-      },
-    inputContainer: {
-        marginBottom: 20,
-    },
-    inputWrapper: {
-        position: 'relative',
-    },
-    optionText: {
-        color: 'white',
-        alignSelf: 'flex-start',
-        fontSize: 30,
-        marginTop: 20,
-    },
-    bar: {
-        marginTop: 50,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        width: '100%'
-      },
-    input: {
-        height: 40,
-        fontSize: 16,
-        color: '#FFFFFF',
-        borderBottomWidth: 0, 
-    },
-    inputLine: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        borderBottomWidth: 1,
-        borderBottomColor: '#A9A9A9',
-      },
-    button: {
-      width: '80%',
-      backgroundColor: '#97c4e1',
-      padding: 15,
-      borderRadius: 5,
-      alignItems: 'center',
-      marginTop: 10,
-    },
-
-
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#0b2138',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 20,
+    textAlign: 'center',
+    marginTop: 40
+  },
+  circle: {
+    width: 130,
+    height: 130,
+    borderRadius: 75,
+    borderWidth: 2.7,
+    backgroundColor: 'lightgrey',
+    borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 75,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    color: '#A9A9A9',
+    marginBottom: 5,
+  },
+  input: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+    color: '#0b2138',
+  },
+  bioInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  button: {
+    backgroundColor: '#97c4e1',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });

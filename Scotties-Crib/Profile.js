@@ -1,13 +1,8 @@
 import React, {useState, useEffect} from 'react';
-
 import { View, TextInput, Text, StyleSheet, Image, StatusBar, Button } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { globalStyles } from './styles';
-import updatedProfileData from './EditProfile'
+import {TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-import { useFocusEffect } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
+import { StackActions } from '@react-navigation/native';
 
 
 
@@ -19,11 +14,6 @@ const ProfileScreen = ({ navigation, route }) => {
   const [bio, setBio] = useState('');
   const [image, setImage] = useState(null);
   const [listings, setListings] = useState([]);
-  // const [updatedProfileData, setUpdatedProfileData] = useState({
-  //   name: '',
-  //   year: '',
-  //   major: ''
-  // });
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -33,63 +23,6 @@ const ProfileScreen = ({ navigation, route }) => {
     return unsubscribe;
   }, [navigation]);
 
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log("Image picker result:", result);
-
-    if (!result.cancelled) {
-      setImage(result.assets[0].uri);
-      saveImageToStorage(result.assets[0].uri);
-    }
-  };
-
-
-  const saveImageToStorage = async (uri) => {
-    try {
-      console.log(uri)
-      // Get the email of the currently logged-in user
-      const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
-      console.log('Logged-in user email:', loggedInUserEmail);
-  
-      // Retrieve the list of users from AsyncStorage
-      const usersJson = await AsyncStorage.getItem('users');
-      console.log('Users from AsyncStorage:', usersJson);
-      let users = usersJson ? JSON.parse(usersJson) : [];
-  
-      // Update the image field of the corresponding user
-      const updatedUsers = users.map(user => {
-        if (user.email === loggedInUserEmail) {
-          console.log('Updating user with email:', loggedInUserEmail);
-          return { ...user, image: uri }; // Add the image property to the user object
-        }
-        return user;
-      });
-  
-      // Save the updated users array back to AsyncStorage
-      await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
-      console.log('Users after update:', updatedUsers);
-    } catch (error) {
-      console.error('Error saving image to AsyncStorage:', error);
-    }
-  };
-
-  // useEffect(() => {
-  //   // Save profile data whenever it changes
-  //   saveProfileData();
-  // }, [updatedProfileData]); // Save whenever updatedProfileData changes
-
-  // useEffect(() => {
-  //   if (route.params && route.params.updatedProfileData) {
-  //     setUpdatedProfileData(route.params.updatedProfileData);
-  //   }
-  // }, [route.params]);
 
   const loadProfileData = async () => {
     try {
@@ -122,13 +55,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }
   };
 
-  // const saveProfileData = async () => {
-  //   try {
-  //     await AsyncStorage.setItem('profileData', JSON.stringify(updatedProfileData));
-  //   } catch (error) {
-  //     console.error('Error saving profile data:', error);
-  //   }
-  // };
+
 
   return (
     <View style={styles.container}>
@@ -141,9 +68,9 @@ const ProfileScreen = ({ navigation, route }) => {
 
         </TouchableOpacity>
       </View>
-      <View style={styles.circle} onTouchEnd={pickImage}>
+      <View style={styles.circle}>
         <Image
-          source={image === null ? require('./assets/freddy.jpg') : { uri: image }}
+          source={image === null ? require('./assets/grey_person.jpg') : { uri: image }}
           style={styles.image}
         /> 
       </View>
@@ -154,10 +81,21 @@ const ProfileScreen = ({ navigation, route }) => {
         <View style={styles.bar}>
 
         </View>
-        <Text
-      style={globalStyles.linkText}
-      onPress={() => navigation.navigate('Login')}
-      >Back to login</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={async () => {
+            // Clear the logged-in user data from AsyncStorage
+            await AsyncStorage.removeItem('loggedInUserEmail');
+
+            // Reset the navigation stack and navigate to the Login screen
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Login' }],
+            });
+          }}
+        >
+          <Text style={styles.buttonText}>Sign Out</Text>
+        </TouchableOpacity>
 
     </View>
   );
@@ -166,6 +104,10 @@ const ProfileScreen = ({ navigation, route }) => {
 
 
 const styles = StyleSheet.create({
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -230,6 +172,14 @@ const styles = StyleSheet.create({
 
   listingsContainer: {
     marginTop: 1,
+  },
+  button: {
+    width: '80%',
+    backgroundColor: '#97c4e1',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
   },
 });
 

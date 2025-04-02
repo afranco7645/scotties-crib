@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, KeyboardAvoidingView, Platform, Alert, Touchable} from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, KeyboardAvoidingView, Alert, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -66,42 +66,43 @@ const SignupScreen = ({navigation}) => {
 
 
   return (
-
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
-      <Text style={styles.welcomeText}>Sign Up</Text>
-      <Image source={require('./assets/icon.png')} style={styles.logo} />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#97c4e1"
-        onChangeText={text => setEmail(text)}
-        value={email}
-        keyboardType="email-address"
-        autoCapitalize='none'
-      />
-      <View style={styles.passwordContainer}>
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex:1}}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
+        <Text style={styles.welcomeText}>Sign Up</Text>
+        <Image source={require('./assets/icon.png')} style={styles.logo} />
         <TextInput
-          style={styles.passwordInput}
-          placeholder="Password"
+          style={styles.input}
+          placeholder="Email"
           placeholderTextColor="#97c4e1"
-          onChangeText={text => setPassword(text)}
-          value={password}
-          secureTextEntry={!showPassword}
+          onChangeText={text => setEmail(text)}
+          value={email}
+          keyboardType="email-address"
           autoCapitalize='none'
         />
-        <TouchableOpacity onPress={toggleShowPassword} style={styles.showButton}>
-          <Text style={styles.showButtonText}>{showPassword ? 'Hide' : 'Show'}</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Password"
+            placeholderTextColor="#97c4e1"
+            onChangeText={text => setPassword(text)}
+            value={password}
+            secureTextEntry={!showPassword}
+            autoCapitalize='none'
+          />
+          <TouchableOpacity onPress={toggleShowPassword} style={styles.showButton}>
+            <Text style={styles.showButtonText}>{showPassword ? 'Hide' : 'Show'}</Text>
+          </TouchableOpacity>
+        </View>
+        
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.goBack()}>
+          <Text style={styles.loginButtonText}>Back to Login</Text>
         </TouchableOpacity>
       </View>
-      
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.loginButtonText}>Back to Login</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
 
   );
 };
