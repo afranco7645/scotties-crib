@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 
-const EditProfile = ({ navigation }) => {
+const EditProfile = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [year, setYear] = useState('');
   const [major, setMajor] = useState('');
   const [bio, setBio] = useState('');
   const [image, setImage] = useState(null);
+  const { isFirstLogin } = route.params || {};
 
   useEffect(() => {
     const loadProfileData = async () => {
@@ -27,6 +28,7 @@ const EditProfile = ({ navigation }) => {
         } else {
           console.log('User not found');
         }
+        console.log('Current value of isFirstLogin:', isFirstLogin);
       } catch (error) {
         console.error('Error loading profile data:', error);
       }
@@ -51,7 +53,15 @@ const EditProfile = ({ navigation }) => {
 
         await AsyncStorage.setItem('users', JSON.stringify(existingUsers));
         console.log('Profile data saved successfully.');
-        navigation.goBack();
+        if (isFirstLogin === true) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'HomeWithNavBar'}],
+          })
+        }
+        else {
+          navigation.goBack();
+        }
       } else {
         console.log('Logged-in user not found in AsyncStorage.');
       }
@@ -76,10 +86,10 @@ const EditProfile = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex:1}}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Edit Profile</Text>
-
+    
+      <ScrollView style={styles.container}>
+        {isFirstLogin === undefined && <Text style={styles.header}>Edit Profile</Text>}
+        {isFirstLogin === true && <Text style={styles.welcomeText}>Welcome! Please complete your profile!</Text>}
         {/* Profile Image */}
         <TouchableOpacity onPress={pickImage}>
           <View style={styles.circle}>
@@ -88,6 +98,9 @@ const EditProfile = ({ navigation }) => {
               style={styles.image}
             />
           </View>
+            <View style={styles.plusIconContainer}>
+              <Text style={styles.plusIcon}>+</Text>
+            </View>
         </TouchableOpacity>
 
         <View style={styles.inputContainer}>
@@ -138,14 +151,27 @@ const EditProfile = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={saveProfile}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </ScrollView>
+    
   );
 };
 
 export default EditProfile;
 
 const styles = StyleSheet.create({
+  plusIconContainer: {
+    position: 'absolute',
+    bottom: 30,
+    right: 130, 
+    backgroundColor: '#97c4e1', 
+    width: 30, 
+    height: 30, 
+    borderRadius: 15, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2, 
+    borderColor: 'white', 
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -208,4 +234,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  welcomeText: {
+    color: 'white',
+    marginBottom: 10,
+    marginTop: 30,
+    fontSize: 30,
+  }
 });

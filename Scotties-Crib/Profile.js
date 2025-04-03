@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, TextInput, Text, StyleSheet, Image, StatusBar, Button } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Image, StatusBar, ScrollView } from 'react-native';
 import {TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -14,9 +14,20 @@ const ProfileScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [listings, setListings] = useState([]);
 
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       loadProfileData();
+      // if (isFirstLogin === 'false') {
+      //   console.log("Profile Edited, isFirstLogin set to false");
+      // }
+      // else if (isFirstLogin === 'true') {
+      //   console.log('This is the first login!');
+      // }
+      // else  {
+      //   console.log("This is NOT the first login");
+      // }
+      
     });
   
     return unsubscribe;
@@ -62,8 +73,6 @@ const ProfileScreen = ({ navigation, route }) => {
         style={styles.editButton}
         onPress={() => navigation.navigate('EditProfile')}>
           <Text style={styles.linkText}>Edit</Text>
-
-
         </TouchableOpacity>
       </View>
       <View style={styles.circle}>

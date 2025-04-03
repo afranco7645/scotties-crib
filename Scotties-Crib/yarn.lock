@@ -6029,6 +6029,34 @@ scheduler@0.24.0-canary-efb381bbf-20230505:
   dependencies:
     loose-envify "^1.1.0"
 
+"scotties-crib@file:":
+  version "1.0.0"
+  resolved "file:"
+  dependencies:
+    "@expo/metro-runtime" "~4.0.1"
+    "@react-native-async-storage/async-storage" "1.23.1"
+    "@react-navigation/bottom-tabs" "^6.5.16"
+    "@react-navigation/native" "^6.1.14"
+    "@react-navigation/stack" "^6.3.20"
+    "@rneui/base" "^4.0.0-rc.7"
+    "@rneui/themed" "^4.0.0-rc.8"
+    expo "^52.0.42"
+    expo-image-picker "~16.0.6"
+    expo-status-bar "~2.0.1"
+    firebase "^11.6.0"
+    react "18.3.1"
+    react-dom "18.3.1"
+    react-native "0.76.8"
+    react-native-gesture-handler "~2.20.2"
+    react-native-image-picker "^7.1.0"
+    react-native-masonry-list "^2.16.1"
+    react-native-paper "^5.12.3"
+    react-native-reanimated "~3.16.1"
+    react-native-safe-area-context "4.12.0"
+    react-native-screens "~4.4.0"
+    react-native-web "~0.19.13"
+    scotties-crib "file:"
+
 selfsigned@^2.4.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/selfsigned/-/selfsigned-2.4.1.tgz"

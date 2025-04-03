@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, Button, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -99,7 +99,7 @@ const LoginScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
       <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
       <Text style={styles.welcomeText}>Log In</Text>
       <Image source={require('./assets/icon.png')} style={styles.logo} />
@@ -139,15 +139,13 @@ const LoginScreen = ({ navigation, route }) => {
         <Text style={styles.buttonText}>Clear Async Storage</Text>
       </TouchableOpacity>
 
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#0b2138',
   },
   logo: {
@@ -167,6 +165,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 36,
     marginBottom: 20, // Adjusted for spacing
+    marginTop: 100,
     fontWeight: 'bold',
     textAlign: 'center',
   },

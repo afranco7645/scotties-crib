@@ -48,8 +48,8 @@ const ForgotPassword = ({ navigation }) => {
   };
 
   const navigateToLogin = () => {
-    console.log('Navigate to Login');
-    navigation.navigate('Login', {name: 'Login'});
+    console.log('Back to Login');
+    navigation.goBack();
   };
 
   return (

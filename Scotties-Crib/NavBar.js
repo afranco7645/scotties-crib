@@ -7,7 +7,6 @@ import HomeScreen from './Home';
 import ProfileScreen from './Profile';
 import UploadScreen from './Upload';
 
-
 const Tab = createBottomTabNavigator();
 
 const NavBar = () => {
@@ -29,16 +28,11 @@ const NavBar = () => {
         },
         tabBarLabelStyle: styles.label,
         tabBarItemStyle: styles.tab,
-        tabBarStyle: [
-          styles.tabBar,
-          null,
-        ],
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: '#FFE082', // Active tab color
+        tabBarInactiveTintColor: '#0b2138', // Inactive tab color
         headerShown: false,
       })}
-      tabBarOptions={{
-        activeTintColor: '#FFE082', // Change the active tab color
-        inactiveTintColor: '#0b2138', // Change the inactive tab color
-      }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Upload" component={UploadScreen} />

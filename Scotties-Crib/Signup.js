@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, KeyboardAvoidingView, Alert, Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -9,9 +10,11 @@ const SignupScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   }
+
   const handleSignup = async () => {
     try {
       // Simulate basic email validation
@@ -46,7 +49,6 @@ const SignupScreen = ({navigation}) => {
         bio: '',
         image: null,
         listings: [],
-
        };
       const updatedUsers = [...existingUsers, newUser];
 
@@ -56,7 +58,7 @@ const SignupScreen = ({navigation}) => {
       console.log('Signup successful');
 
       // Navigate to another screen after successful signup
-      navigation.navigate('Profile');
+      navigation.navigate('EditProfile', { isFirstLogin: true});
     } catch (error) {
       console.error('Error signing up:', error);
       // Handle other errors (e.g., show an error message)
@@ -67,7 +69,7 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex:1}}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
         <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
         <Text style={styles.welcomeText}>Sign Up</Text>
         <Image source={require('./assets/icon.png')} style={styles.logo} />
@@ -101,7 +103,7 @@ const SignupScreen = ({navigation}) => {
         <TouchableOpacity style={styles.loginButton} onPress={() => navigation.goBack()}>
           <Text style={styles.loginButtonText}>Back to Login</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
 
   );
@@ -114,8 +116,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#0b2138',
   },
   innerContainer: {
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 36,
     marginBottom: 20, 
+    marginTop: 100,
     fontWeight: 'bold',
     textAlign: 'center',
   },
