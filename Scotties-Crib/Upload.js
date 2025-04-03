@@ -77,6 +77,15 @@ const UploadScreen = ({ navigation, route }) => {
           
 
         }
+        if (image == null) {
+          alert('Please upload an image');
+        }
+        else if (price == '') {
+          alert('Please enter a price');
+        }
+        else if (description == '') {
+          alert('Please enter a description');
+        }
     
           // Navigate back to the Profile screen
         } else {
@@ -137,7 +146,7 @@ const UploadScreen = ({ navigation, route }) => {
             placeholder="Description"
             multiline={true}
         />
-        <TouchableOpacity style={styles.uploadImageButton}>
+        <TouchableOpacity style={styles.uploadImageButton} onPress={handleUpload}>
           <Text>Upload</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={clearListings}>

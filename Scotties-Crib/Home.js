@@ -34,7 +34,7 @@ const HomeScreen = ({navigation, route}) => {
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.space} />
       <SearchBar />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -46,7 +46,7 @@ const HomeScreen = ({navigation, route}) => {
           </View>
         ))}
       </ScrollView>
-    </ScrollView>
+    </View>
   );
 }
 
