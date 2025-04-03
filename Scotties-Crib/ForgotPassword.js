@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -53,10 +54,10 @@ const ForgotPassword = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
       <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
       <Text style={styles.welcomeText}>Forgot Password</Text>
-      <Text style={styles.instructions}>Please enter your regsitered email</Text>
+      <Text style={styles.instructions}>Please enter your registered email</Text>
         <TextInput
             style={styles.input}
             placeholder="Email"
@@ -72,15 +73,13 @@ const ForgotPassword = ({ navigation }) => {
       <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
         <Text style={styles.loginButtonText}>Return to Login</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#0b2138',
   },
   input: {
@@ -95,7 +94,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 28,
     fontWeight: '600',
-    marginBottom: '2%'
+    marginBottom: '2%',
+    marginTop: 350,
   },
   instructions: {
     color: 'white',

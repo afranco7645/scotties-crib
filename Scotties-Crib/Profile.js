@@ -67,7 +67,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
       <View style={styles.bar}>
         <TouchableOpacity
         style={styles.editButton}
@@ -102,7 +102,7 @@ const ProfileScreen = ({ navigation, route }) => {
           <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
 
-    </View>
+    </ScrollView>
   );
 };
 
@@ -115,8 +115,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     padding: 10,
     backgroundColor: '#0b2138',
 
@@ -148,6 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    marginBottom: 10,
   },
   image: {
     width: '100%',

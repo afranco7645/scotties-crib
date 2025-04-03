@@ -62,7 +62,10 @@ const LoginScreen = ({ navigation, route }) => {
           await AsyncStorage.setItem('loggedInUserEmail', email);
           // Navigate to another screen after successful login
 
-          navigation.navigate('HomeWithNavBar');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "HomeWithNavBar" }],
+          });
         } else {
           console.log('Invalid email or password');
           alert('Invalid email or password')

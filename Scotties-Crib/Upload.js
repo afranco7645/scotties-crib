@@ -5,7 +5,6 @@ import { globalStyles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import fetchListings from './Home.js'
-// import { KeyboardAvoidingView } from 'react-native-web';
 
 const UploadScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
@@ -115,24 +114,22 @@ const UploadScreen = ({ navigation, route }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -200} // Adjust this value according to your needs
     >
-      <Text style={styles.headerText}>Upload an Image of the Item:</Text>
-      <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
-        <Text>Upload Image</Text>
-      </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <Text style={styles.headerText}>Price:</Text>
-      <TextInput
-        style={styles.input}
-        value={price}
-        onChangeText={setPrice}
-        placeholder="Price"
-        keyboardType="numeric"
-      />
-      <TouchableOpacity onPress={Keyboard.dismiss}>
-
+      <ScrollView>
+        <Text style={styles.headerText}>Upload an Image of the Item:</Text>
+        <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
+          <Text>Upload Image</Text>
+        </TouchableOpacity>
+        {image && <Image source={{ uri: image }} style={styles.image} />}
+        <Text style={styles.headerText}>Price:</Text>
+        <TextInput
+          style={styles.input}
+          value={price}
+          onChangeText={setPrice}
+          placeholder="Price"
+          keyboardType="numeric"
+          placeholderTextColor={'#A9A9A9'}
+        />
         <Text style={styles.headerText}>Item Description:</Text>
-      </TouchableOpacity>
-        
         <TextInput
             style={[styles.input, styles.descriptionInput]}
             value={description}
@@ -140,12 +137,13 @@ const UploadScreen = ({ navigation, route }) => {
             placeholder="Description"
             multiline={true}
         />
-
-
-      <Button style="alignItems:center" title="Upload" onPress={handleUpload} />
-      {/* <TouchableOpacity onPress={clearListings}>
-        <Text>Clear Listings</Text>
-      </TouchableOpacity> */}
+        <TouchableOpacity style={styles.uploadImageButton}>
+          <Text>Upload</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity onPress={clearListings}>
+          <Text>Clear Listings</Text>
+        </TouchableOpacity> */}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -160,6 +158,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 25,
     marginBottom: 10,
+    marginTop: 60,
   },
   input: {
     width: '100%',
@@ -187,6 +186,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
+  },
+  button: {
+    width: '80%',
+    backgroundColor: '#97c4e1',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+    justifyContent: 'center',
   },
 });
 
