@@ -53,7 +53,7 @@ const HomeScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#0b2138',
   },
   scrollViewContent: {
     flexDirection: 'row',
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   listingContainer: {
     width: '48%',
     marginBottom: 20,
-    borderColor: '#ccc',
+    borderColor: 'white',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
@@ -79,10 +79,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 5,
+    color: 'white',
   },
   description: {
     fontSize: 14,
     marginTop: 5,
+    color: 'white',
   },
   space: {
     height: 33, // Adjust the height as needed

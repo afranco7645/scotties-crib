@@ -117,8 +117,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#0b2138',
-
-
   },
   bar: {
     padding: 21,

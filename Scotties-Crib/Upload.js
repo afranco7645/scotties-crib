@@ -145,6 +145,7 @@ const UploadScreen = ({ navigation, route }) => {
             onChangeText={setDescription}
             placeholder="Description"
             multiline={true}
+            placeholderTextColor={'#A9A9A9'}
         />
         <TouchableOpacity style={styles.uploadImageButton} onPress={handleUpload}>
           <Text>Upload</Text>
@@ -161,13 +162,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#0b2138',
     padding: 20,
   },
   headerText: {
     fontSize: 25,
     marginBottom: 10,
     marginTop: 60,
+    color: 'white',
   },
   input: {
     width: '100%',
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     fontSize: 16,
+    color: 'white',
   },
   descriptionInput: {
     height: 100,
