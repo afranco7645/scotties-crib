@@ -73,7 +73,7 @@ const ResetPassword = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
+    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} keyboardDismissMode='interactive'>
       <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
       <Text style={styles.welcomeText}>Reset Password</Text>
       <Text style={styles.instructions}>Please enter a new password</Text>

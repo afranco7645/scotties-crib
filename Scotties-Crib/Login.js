@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, StatusBar, Image, ScrollView, Alert, KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -102,47 +102,49 @@ const LoginScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
-      <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
-      <Text style={styles.welcomeText}>Log In</Text>
-      <Image source={require('./assets/icon.png')} style={styles.logo} />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#97c4e1"
-        onChangeText={text => setEmail(text)}
-        value={email}
-        keyboardType="email-address"
-        autoCapitalize='none'
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#97c4e1"
-        onChangeText={text => setPassword(text)}
-        value={password}
-        secureTextEntry={true}
-        autoCapitalize='none'
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.signUpButton} onPress={navigateToSignUp}>
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
-      </TouchableOpacity>
+    <KeyboardAvoidingView style={styles.container}>
+      <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} keyboardDismissMode='interactive'>
+        <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
+        <Text style={styles.welcomeText}>Log In</Text>
+        <Image source={require('./assets/icon.png')} style={styles.logo} />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#97c4e1"
+          onChangeText={text => setEmail(text)}
+          value={email}
+          keyboardType="email-address"
+          autoCapitalize='none'
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#97c4e1"
+          onChangeText={text => setPassword(text)}
+          value={password}
+          secureTextEntry={true}
+          autoCapitalize='none'
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signUpButton} onPress={navigateToSignUp}>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.forgotPasswordButton} onPress={navigateToForgotPassword}>
-        <Text style={styles.signUpButtonText}>Forgot Your Password?</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.forgotPasswordButton} onPress={navigateToForgotPassword}>
+          <Text style={styles.signUpButtonText}>Forgot Your Password?</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.devButton} onPress={showAsyncStorage}>
-        <Text style={styles.buttonText}>Show Async Storage</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.devButton1} onPress={clearAsyncStorage}>
-        <Text style={styles.buttonText}>Clear Async Storage</Text>
-      </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.devButton} onPress={showAsyncStorage}>
+          <Text style={styles.buttonText}>Show Async Storage</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.devButton1} onPress={clearAsyncStorage}>
+          <Text style={styles.buttonText}>Clear Async Storage</Text>
+        </TouchableOpacity> */}
 
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

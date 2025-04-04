@@ -69,7 +69,7 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex:1}}>
-      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
+      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} keyboardDismissMode='interactive'>
         <StatusBar backgroundColor="#0b2138" barStyle="light-content" />
         <Text style={styles.welcomeText}>Sign Up</Text>
         <Image source={require('./assets/icon.png')} style={styles.logo} />

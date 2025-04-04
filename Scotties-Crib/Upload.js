@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, Platform, KeyboardAvoidingView, Keyboard} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Image, Platform, KeyboardAvoidingView } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { globalStyles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,7 @@ import fetchListings from './Home.js'
 
 const UploadScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
+  const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
 
@@ -57,9 +58,10 @@ const UploadScreen = ({ navigation, route }) => {
           // Update the user's profile data
         //   existingUsers[userIndex]['listings']
         if (image != null && price != '' && description != ''){
-          existingUsers[userIndex]['listings'].push([image, price, description]);
+          existingUsers[userIndex]['listings'].push([image, name, price, description]);
           console.log(existingUsers[userIndex]);
           setImage(null);
+          setName('');
           setPrice('');
           setDescription('');
           
@@ -79,6 +81,9 @@ const UploadScreen = ({ navigation, route }) => {
         }
         if (image == null) {
           alert('Please upload an image');
+        }
+        else if (name == '') {
+          alert('Please enter a name');
         }
         else if (price == '') {
           alert('Please enter a price');
@@ -123,12 +128,20 @@ const UploadScreen = ({ navigation, route }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -200} // Adjust this value according to your needs
     >
-      <ScrollView>
-        <Text style={styles.headerText}>Upload an Image of the Item:</Text>
+      <ScrollView keyboardDismissMode='interactive'>
+        <Text style={styles.welcomeText}>Upload an Image of the Item:</Text>
         <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
           <Text>Upload Image</Text>
         </TouchableOpacity>
         {image && <Image source={{ uri: image }} style={styles.image} />}
+        <Text style={styles.headerText}>Name</Text> 
+        <TextInput 
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder='Name'
+          placeholderTextColor={'#A9A9A9'}
+        />
         <Text style={styles.headerText}>Price:</Text>
         <TextInput
           style={styles.input}
@@ -150,7 +163,7 @@ const UploadScreen = ({ navigation, route }) => {
         <TouchableOpacity style={styles.uploadImageButton} onPress={handleUpload}>
           <Text>Upload</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={clearListings}>
+        {/* <TouchableOpacity onPress={clearListings} style={styles.uploadImageButton}>
           <Text>Clear Listings</Text>
         </TouchableOpacity> */}
       </ScrollView>
@@ -167,9 +180,13 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 25,
-    marginBottom: 10,
-    marginTop: 60,
     color: 'white',
+    marginTop: 20,
+  },
+  welcomeText: {
+    fontSize: 25,
+    color: 'white',
+    marginTop: 40,
   },
   input: {
     width: '100%',

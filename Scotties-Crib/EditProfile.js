@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -86,8 +86,8 @@ const EditProfile = ({ navigation, route }) => {
   };
 
   return (
-    
-      <ScrollView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "padding" : "height"}>
+      <ScrollView keyboardDismissMode='interactive'>
         {isFirstLogin === undefined && <Text style={styles.header}>Edit Profile</Text>}
         {isFirstLogin === true && <Text style={styles.welcomeText}>Welcome! Please complete your profile!</Text>}
         {/* Profile Image */}
@@ -152,7 +152,7 @@ const EditProfile = ({ navigation, route }) => {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </ScrollView>
-    
+      </KeyboardAvoidingView>
   );
 };
 

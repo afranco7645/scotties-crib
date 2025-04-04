@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Image, Text, Dimensions } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Text, Dimensions, Touchable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SearchBar from './searchBar';
 
@@ -19,8 +19,8 @@ const HomeScreen = ({navigation, route}) => {
       console.error('Error fetching listings:', error);
     }
   };
-  useEffect(() => {
 
+  useEffect(() => {
     fetchListings();
   }, []);
 
@@ -37,12 +37,15 @@ const HomeScreen = ({navigation, route}) => {
     <View style={styles.container}>
       <View style={styles.space} />
       <SearchBar />
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardDismissMode='interactive'>
         {listings.map((listing, index) => (
           <View key={index} style={styles.listingContainer}>
-            <Image source={{ uri: listing[0] }} style={styles.image} />
-            <Text style={styles.price}>Price: ${listing[1]}</Text>
-            <Text style={styles.description}>{listing[2]}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Listing', { image: listing[0], name: listing[1], price: listing[2], description: listing[3] })}>
+              <Image source={{ uri: listing[0] }} style={styles.image} />
+              {/* <Text style={styles.price}>{listing[0]}</Text> */}
+              <Text style={styles.price}>Price: ${listing[2]}</Text>
+              <Text style={styles.description}>{listing[1]}</Text>
+            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>

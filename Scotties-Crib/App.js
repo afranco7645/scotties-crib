@@ -9,6 +9,7 @@ import EditProfileScreen from './EditProfile';
 import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import NavBar from './NavBar';
+import ListingScreen from './Listing';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,13 @@ export default function App() {
         <Stack.Screen
           name="HomeWithNavBar"
           component={NavBar}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Listing"
+          component={ListingScreen}
           options={{
             headerShown: false,
           }}
