@@ -125,8 +125,6 @@ const UploadScreen = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -200} // Adjust this value according to your needs
     >
       <ScrollView keyboardDismissMode='interactive'>
         <Text style={styles.welcomeText}>Upload an Image of the Item:</Text>
