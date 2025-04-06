@@ -7,6 +7,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const HomeScreen = ({navigation, route}) => {
   const [listings, setListings] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState('');
 
   const fetchListings = async () => {
     try {
@@ -15,6 +16,8 @@ const HomeScreen = ({navigation, route}) => {
       
       const allListings = existingUsers.flatMap(user => user.listings);
       setListings(allListings);
+      const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
+      setLoggedInUser(loggedInUserEmail);
     } catch (error) {
       console.error('Error fetching listings:', error);
     }
@@ -40,7 +43,7 @@ const HomeScreen = ({navigation, route}) => {
       <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardDismissMode='interactive'>
         {listings.map((listing, index) => (
           <View key={index} style={styles.listingContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Listing', { image: listing[0], name: listing[1], price: listing[2], description: listing[3], profilePic: listing[4], profileName: listing[5], profileBio: listing[6] })}>
+            <TouchableOpacity onPress={() => navigation.navigate('Listing', { image: listing[0], name: listing[1], price: listing[2], description: listing[3], sellerEmail: listing[4]})}>
               <Image source={{ uri: listing[0] }} style={styles.image} />
               {/* <Text style={styles.price}>{listing[0]}</Text> */}
               <Text style={styles.price}>${listing[2]}</Text>

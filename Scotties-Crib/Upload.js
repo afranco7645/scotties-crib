@@ -11,9 +11,7 @@ const UploadScreen = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [profilePic, setProfilePic] = useState(null);
-  const [profileName, setProfileName] = useState('');
-  const [profileBio, setProfileBio] = useState('');
+  const [sellerEmail, setSellerEmail] = useState('');
 
   const clearListings = async () => {
     try {
@@ -61,23 +59,16 @@ const UploadScreen = ({ navigation, route }) => {
         if (userIndex !== -1) {
           // Update the user's profile data
         //   existingUsers[userIndex]['listings']
-        const user = existingUsers[userIndex];
 
-        const profilePic = user.image;
-        const profileName = user.name;
-        const profileBio = user.bio;
         // console.log('Profile Picture:', profilePic);
         // console.log('Profile Name:', profileName);
-        if (image != null && name != '' && price != '' && description != '' && profilePic != null && profileName != '' && profileBio){
-          existingUsers[userIndex]['listings'].push([image, name, price, description, profilePic, profileName, profileBio]);
+        if (image != null && name != '' && price != '' && description != ''){
+          existingUsers[userIndex]['listings'].push([image, name, price, description, loggedInUserEmail]);
           console.log(existingUsers[userIndex]);
           setImage(null);
           setName('');
           setPrice('');
           setDescription('');
-          setProfilePic(null);
-          setProfileName('');
-          setProfileBio('');
           
           // console.log(year)
           // console.log(major)
@@ -104,15 +95,6 @@ const UploadScreen = ({ navigation, route }) => {
         }
         else if (description == '') {
           alert('Please enter a description');
-        }
-        else if (profilePic == null) {
-          alert('Error retrieving user\'s profile pic');
-        }
-        else if (profileName == '') {
-          alert('Error retrieving user\'s profile name');
-        }
-        else if (profileBio == '') {
-          alert('Error retrieving user\'s profile bio');
         }
     
           // Navigate back to the Profile screen

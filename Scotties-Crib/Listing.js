@@ -1,15 +1,39 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { use, useState } from "react";
+import { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 
 const ListingScreen = ({ navigation, route }) => {
-    const { image, name, price, description, profilePic, profileName, profileBio } = route.params;
+    const { image, name, price, description, sellerEmail } = route.params;
 
-    if (image) {console.log("Image exists");}
-    console.log("Name:", name);
-    console.log("Price:", price);
-    console.log("Description:", description);
-    if (profilePic) {console.log("ProfilePic exists")};
-    console.log(profileName);
-    console.log(profileBio);
+    const [profilePic, setProfilePic] = useState(null);
+    const [profileName, setProfileName] = useState('');
+    const [profileBio, setProfileBio] = useState('');
+
+    const fetchSellerInfo = async () => {
+        try {
+            const usersJson = await AsyncStorage.getItem('users');
+            const users = usersJson ? JSON.parse(usersJson) : [];
+            const seller = users.find(user => user.email === sellerEmail);
+            console.log("Seller Email:", seller.email);
+
+            setProfilePic(seller.image);
+            setProfileName(seller.name);
+            setProfileBio(seller.bio);
+        } catch(error) {
+            console.error("Error fetching seller info:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSellerInfo();
+    }, []);
+
+    // if (image) {console.log("Image exists");}
+    // console.log("Name:", name);
+    // console.log("Price:", price);
+    // console.log("Description:", description);
+    
     return (
         <>
             <ScrollView 
@@ -33,9 +57,11 @@ const ListingScreen = ({ navigation, route }) => {
                 <View style={styles.line}/>
                 <Text style={styles.sellerInfo}>Seller Information</Text>
                 <View style={styles.sellerContainer}>
-                    <Image source={{uri: profilePic}} style={styles.sellerImage}></Image>
-                    <Text style={styles.sellerName}>{profileName}</Text>
-                    <Text style={styles.sellerBio}>{profileBio}</Text>
+                    <Image source={profilePic === null ? require('./assets/grey_person.jpg') : {uri: profilePic}} style={styles.sellerImage}></Image>
+                    <View>
+                        <Text style={styles.sellerName}>{profileName}</Text>
+                        <Text style={styles.sellerBio}>{profileBio}</Text>
+                    </View>
                 </View>
             </ScrollView>
         </>
@@ -106,9 +132,8 @@ const styles = StyleSheet.create({
     sellerBio: {
         color: 'white',
         fontSize: 16,
-        marginTop: 45,
-        position: 'absolute',
-        left: 100,
+        marginTop: 8,
+        marginLeft: 16,
     },
     topBar: {
         backgroundColor: 'white',
