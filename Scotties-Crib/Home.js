@@ -40,10 +40,10 @@ const HomeScreen = ({navigation, route}) => {
       <ScrollView contentContainerStyle={styles.scrollViewContent} keyboardDismissMode='interactive'>
         {listings.map((listing, index) => (
           <View key={index} style={styles.listingContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Listing', { image: listing[0], name: listing[1], price: listing[2], description: listing[3] })}>
+            <TouchableOpacity onPress={() => navigation.navigate('Listing', { image: listing[0], name: listing[1], price: listing[2], description: listing[3], profilePic: listing[4], profileName: listing[5], profileBio: listing[6] })}>
               <Image source={{ uri: listing[0] }} style={styles.image} />
               {/* <Text style={styles.price}>{listing[0]}</Text> */}
-              <Text style={styles.price}>Price: ${listing[2]}</Text>
+              <Text style={styles.price}>${listing[2]}</Text>
               <Text style={styles.description}>{listing[1]}</Text>
             </TouchableOpacity>
           </View>

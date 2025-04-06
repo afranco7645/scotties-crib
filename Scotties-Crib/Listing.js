@@ -1,18 +1,20 @@
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 
 const ListingScreen = ({ navigation, route }) => {
-    const { image, name, price, description } = route.params;
+    const { image, name, price, description, profilePic, profileName, profileBio } = route.params;
 
     if (image) {console.log("Image exists");}
     console.log("Name:", name);
     console.log("Price:", price);
     console.log("Description:", description);
+    if (profilePic) {console.log("ProfilePic exists")};
+    console.log(profileName);
+    console.log(profileBio);
     return (
         <>
             <ScrollView 
-                onScrollToTop={() => console.log('Scrolled to top')} 
                 style={styles.container} 
-                contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
+                contentContainerStyle={{justifyContent: 'center'}}
                 stickyHeaderIndices={[0]}
             >
                 <View style={styles.topBar}>
@@ -29,6 +31,12 @@ const ListingScreen = ({ navigation, route }) => {
                 <Text style={styles.description}>Description</Text>
                 <Text style={styles.descriptionText}>{description}</Text>
                 <View style={styles.line}/>
+                <Text style={styles.sellerInfo}>Seller Information</Text>
+                <View style={styles.sellerContainer}>
+                    <Image source={{uri: profilePic}} style={styles.sellerImage}></Image>
+                    <Text style={styles.sellerName}>{profileName}</Text>
+                    <Text style={styles.sellerBio}>{profileBio}</Text>
+                </View>
             </ScrollView>
         </>
     );
@@ -50,7 +58,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 10,
         marginTop: 10,
-        alignSelf: "baseline",
         fontWeight: 'bold',
     },
     price: {
@@ -58,22 +65,50 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 10,
         marginTop: 5,
-        alignSelf: "baseline",
     },
     description: {
-        alignSelf: 'baseline',
         color: 'white',
         fontSize: 20,
-        marginTop: 5,
+        marginTop: 15,
         marginLeft: 11,
         fontWeight: 'bold',
     },
     descriptionText: {
         color: 'white',
         fontSize: 18,
-        alignSelf: 'baseline',
         marginLeft: 11,
         marginTop: 5,
+    },
+    sellerInfo: {
+        color: 'white',
+        fontSize: 20,
+        marginTop: 15,
+        marginLeft: 11,
+        fontWeight: 'bold',
+    },
+    sellerContainer: {
+        flexDirection: 'row',
+    },
+    sellerImage: {
+        width: 75,
+        height: 75,
+        borderRadius: 100,
+        marginTop: 5,
+        marginLeft: 10,
+    },
+    sellerName: {
+        color: 'white',
+        fontSize: 18,
+        marginTop: 20,
+        marginLeft: 15,
+        fontWeight: 'bold',
+    },
+    sellerBio: {
+        color: 'white',
+        fontSize: 16,
+        marginTop: 45,
+        position: 'absolute',
+        left: 100,
     },
     topBar: {
         backgroundColor: 'white',

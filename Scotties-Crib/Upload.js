@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, Platform, KeyboardAvoidingView } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { globalStyles } from './styles.js';
@@ -11,6 +11,9 @@ const UploadScreen = ({ navigation, route }) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
+  const [profilePic, setProfilePic] = useState(null);
+  const [profileName, setProfileName] = useState('');
+  const [profileBio, setProfileBio] = useState('');
 
   const clearListings = async () => {
     try {
@@ -54,16 +57,27 @@ const UploadScreen = ({ navigation, route }) => {
     
         // Find the index of the logged-in user in the existing users array
         const userIndex = existingUsers.findIndex(user => user.email === loggedInUserEmail);
+
         if (userIndex !== -1) {
           // Update the user's profile data
         //   existingUsers[userIndex]['listings']
-        if (image != null && price != '' && description != ''){
-          existingUsers[userIndex]['listings'].push([image, name, price, description]);
+        const user = existingUsers[userIndex];
+
+        const profilePic = user.image;
+        const profileName = user.name;
+        const profileBio = user.bio;
+        // console.log('Profile Picture:', profilePic);
+        // console.log('Profile Name:', profileName);
+        if (image != null && name != '' && price != '' && description != '' && profilePic != null && profileName != '' && profileBio){
+          existingUsers[userIndex]['listings'].push([image, name, price, description, profilePic, profileName, profileBio]);
           console.log(existingUsers[userIndex]);
           setImage(null);
           setName('');
           setPrice('');
           setDescription('');
+          setProfilePic(null);
+          setProfileName('');
+          setProfileBio('');
           
           // console.log(year)
           // console.log(major)
@@ -90,6 +104,15 @@ const UploadScreen = ({ navigation, route }) => {
         }
         else if (description == '') {
           alert('Please enter a description');
+        }
+        else if (profilePic == null) {
+          alert('Error retrieving user\'s profile pic');
+        }
+        else if (profileName == '') {
+          alert('Error retrieving user\'s profile name');
+        }
+        else if (profileBio == '') {
+          alert('Error retrieving user\'s profile bio');
         }
     
           // Navigate back to the Profile screen
@@ -125,6 +148,7 @@ const UploadScreen = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView keyboardDismissMode='interactive'>
         <Text style={styles.welcomeText}>Upload an Image of the Item:</Text>
