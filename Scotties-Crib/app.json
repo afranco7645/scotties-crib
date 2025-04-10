@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Scotties Crib",
-    "slug": "Scotties Crib",
+    "slug": "scotties-crib",
+    "owner": "afranco7645",
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +18,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.cactus.scottiesCrib",
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +36,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "ae583e60-37bd-4188-9b21-a7179b5f568f"
+        "projectId": "f896e1f1-9b6f-45af-a365-79b10b480768"
       }
     }
   }
