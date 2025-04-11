@@ -5,7 +5,7 @@ import { use } from "react";
 import { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal } from "react-native";
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 
 const ListingScreen = ({ navigation, route }) => {
     const { image, name, price, description, sellerEmail } = route.params;
@@ -72,6 +72,11 @@ const ListingScreen = ({ navigation, route }) => {
                         <TouchableOpacity onPress={() => navigation.goBack()}>
                             <Text style={styles.exitText}>X</Text>
                         </TouchableOpacity>
+                        <View style={styles.dotsContainer}>
+                            <TouchableOpacity onPress={() => console.log("Dots pressed!")}>
+                                <Text style={styles.dotsText}>...</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
@@ -189,10 +194,10 @@ const styles = StyleSheet.create({
     },
     exitContainer: {
         color: 'black',
-        // backgroundColor: 'black',
+        flexDirection: 'row',
         borderRadius: 10,
-        height: 45,
-        width: 40,
+        height: '45%',
+        width: "100%",
         marginLeft: 15,
         marginTop: 55,
         fontFamily: "Roboto",
@@ -201,6 +206,14 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginTop: 10,
         marginLeft: 7,
+    },
+    dotsContainer: {
+        width: '10%',
+        marginLeft: 335,
+    },
+    dotsText: {
+        fontSize: 30,
+        marginLeft: 10,
     },
     line: {
         borderBottomColor: 'white',
