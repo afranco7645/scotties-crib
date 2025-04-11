@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     color: 'white',
     marginBottom: 10,
-    marginTop: 30,
+    marginTop: 40,
     fontSize: 30,
   }
 });
