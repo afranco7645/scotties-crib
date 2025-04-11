@@ -1,7 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { use, useState } from "react";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { useState } from "react";
+import { use } from "react";
 import { useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal } from "react-native";
+import { Gesture, GestureDetector, } from "react-native-gesture-handler";
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 
 const ListingScreen = ({ navigation, route }) => {
     const { image, name, price, description, sellerEmail } = route.params;
@@ -9,6 +13,7 @@ const ListingScreen = ({ navigation, route }) => {
     const [profilePic, setProfilePic] = useState(null);
     const [profileName, setProfileName] = useState('');
     const [profileBio, setProfileBio] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const fetchSellerInfo = async () => {
         try {
@@ -16,6 +21,7 @@ const ListingScreen = ({ navigation, route }) => {
             const users = usersJson ? JSON.parse(usersJson) : [];
             const seller = users.find(user => user.email === sellerEmail);
             console.log("Seller Email:", seller.email);
+            console.log("Seller Image:", seller.image);
 
             setProfilePic(seller.image);
             setProfileName(seller.name);
@@ -29,11 +35,31 @@ const ListingScreen = ({ navigation, route }) => {
         fetchSellerInfo();
     }, []);
 
+    const translationX = useSharedValue(0);
+    const translationY = useSharedValue(0);
+    const prevTranslationX = useSharedValue(0);
+    const prevTranslationY = useSharedValue(0);
+    
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [
+            { translateX: translationX.value },
+            { translateY: translationY.value },
+        ],
+    }));
+
+    const panGesture = Gesture.Pan()
+        .onStart(() => {
+            prevTranslationX.value = translationX.value;
+            prevTranslationY.value = translationY.value;
+        })
+        .onUpdate((event) => {
+            translationX.value = prevTranslationX.value + event.translationX;
+            translationY.value = prevTranslationY.value + event.translationY;
+        });
     // if (image) {console.log("Image exists");}
     // console.log("Name:", name);
     // console.log("Price:", price);
     // console.log("Description:", description);
-    
     return (
         <>
             <ScrollView 
@@ -48,7 +74,9 @@ const ListingScreen = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Image source={{ uri: image }} style={styles.image}/>
+                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+                    <Image source={{ uri: image }} style={styles.image}/>
+                </TouchableOpacity>
                 <Text style={styles.name}>{name}</Text>
                 <Text style={styles.price}>${price}</Text>
                 <View style={styles.line}/>
@@ -64,6 +92,25 @@ const ListingScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </ScrollView>
+
+            <Modal 
+                visible={isModalVisible} animationType="slide"
+                onRequestClose={() => setIsModalVisible(false)}  
+                presentationStyle="pageSheet"          
+            >
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+                        <Text style={styles.modalExitButton}>X</Text>
+                    </TouchableOpacity>
+                
+                    
+                    <GestureDetector gesture={panGesture}>
+                        <Animated.View style={animatedStyle}>
+                            <Image source={{ uri: image }} style={styles.image}/>
+                        </Animated.View>
+                    </GestureDetector>
+                </View>
+            </Modal>
         </>
     );
 };
@@ -160,5 +207,16 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.6,
         width: '95%',
         marginTop: 15,
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'black',
+    },
+    modalExitButton: {
+        color: 'white',
+        fontSize: 40,
+        marginTop: 20,
+        marginLeft: 20,
+        marginBottom: 90,
     },
 });

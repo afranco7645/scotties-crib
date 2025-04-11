@@ -17,7 +17,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="HomeWithNavBar"
         screenOptions={{
           gestureEnabled: true,
           gestureDirection: 'horizontal', 
