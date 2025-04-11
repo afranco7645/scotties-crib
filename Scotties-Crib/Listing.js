@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal } from "react-native";
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import { Dropdown } from 'react-native-element-dropdown';
 
 const ListingScreen = ({ navigation, route }) => {
     const { image, name, price, description, sellerEmail } = route.params;
@@ -13,21 +14,68 @@ const ListingScreen = ({ navigation, route }) => {
     const [profilePic, setProfilePic] = useState(null);
     const [profileName, setProfileName] = useState('');
     const [profileBio, setProfileBio] = useState('');
+
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [isSeller, setIsSeller] = useState(false);
+
+    const toggleDropdown = () => {
+        // setIsDropdownVisible(!isDropdownVisible);
+    };
 
     const fetchSellerInfo = async () => {
         try {
             const usersJson = await AsyncStorage.getItem('users');
             const users = usersJson ? JSON.parse(usersJson) : [];
             const seller = users.find(user => user.email === sellerEmail);
-            console.log("Seller Email:", seller.email);
-            console.log("Seller Image:", seller.image);
 
+            const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
+            console.log("Logged in user email:", loggedInUserEmail);
+            console.log("Seller Email:", seller.email);
+            // console.log("Seller Image:", seller.image);
+            
+            if (loggedInUserEmail === seller.email) {
+                console.log("The logged in user is the seller");
+                setIsSeller(true);
+            }
             setProfilePic(seller.image);
             setProfileName(seller.name);
             setProfileBio(seller.bio);
+            
         } catch(error) {
             console.error("Error fetching seller info:", error);
+        }
+    };
+
+    const deleteListing = async () => {
+        // console.log('delete listing');
+        try {
+            const existingUsersJson = await AsyncStorage.getItem('users');
+            const existingUsers = existingUsersJson ? JSON.parse(existingUsersJson) : [];
+
+            const sellerIndex = existingUsers.findIndex(user => user.email === sellerEmail)
+            if (sellerIndex === -1) {
+                console.log("Seller not found in Async Storage");
+                return;
+            }
+
+            // console.log(name)
+            const sellerListings = existingUsers[sellerIndex]['listings'];
+            const listingIndex = sellerListings.findIndex(listing => listing[1] === name);
+            // console.log(listingArray);
+            
+            if (listingIndex === -1) {
+                console.log("Listing not found for the seller");
+                return;
+            }
+
+            // console.log('Found listing:', sellerListings[listingIndex][1]);
+            sellerListings.splice(listingIndex, 1);
+            await AsyncStorage.setItem('users', JSON.stringify(existingUsers));
+            navigation.goBack();
+
+        } catch (error) {
+            console.error('Error deleting listing:', error);
         }
     };
 
@@ -72,11 +120,11 @@ const ListingScreen = ({ navigation, route }) => {
                         <TouchableOpacity onPress={() => navigation.goBack()}>
                             <Text style={styles.exitText}>X</Text>
                         </TouchableOpacity>
-                        <View style={styles.dotsContainer}>
-                            <TouchableOpacity onPress={() => console.log("Dots pressed!")}>
+                        {isSeller && <View style={styles.dotsContainer}>
+                            <TouchableOpacity onPress={deleteListing}>
                                 <Text style={styles.dotsText}>...</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View>}
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
