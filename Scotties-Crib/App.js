@@ -10,6 +10,8 @@ import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 import NavBar from './NavBar';
 import ListingScreen from './Listing';
+import DropdownComponent from './DropDown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +85,13 @@ export default function App() {
         <Stack.Screen
           name="Listing"
           component={ListingScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Dropdown"
+          component={DropdownComponent}
           options={{
             headerShown: false,
           }}

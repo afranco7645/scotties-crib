@@ -1,12 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { useState } from "react";
-import { use } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal } from "react-native";
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
-import { Dropdown } from 'react-native-element-dropdown';
+import DropdownComponent from "./DropDown";
+import ListingModalComponent from "./ListingModal";
 
 const ListingScreen = ({ navigation, route }) => {
     const { image, name, price, description, sellerEmail } = route.params;
@@ -14,14 +12,10 @@ const ListingScreen = ({ navigation, route }) => {
     const [profilePic, setProfilePic] = useState(null);
     const [profileName, setProfileName] = useState('');
     const [profileBio, setProfileBio] = useState('');
-
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
 
-    const toggleDropdown = () => {
-        // setIsDropdownVisible(!isDropdownVisible);
-    };
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    
 
     const fetchSellerInfo = async () => {
         try {
@@ -83,31 +77,6 @@ const ListingScreen = ({ navigation, route }) => {
         fetchSellerInfo();
     }, []);
 
-    const translationX = useSharedValue(0);
-    const translationY = useSharedValue(0);
-    const prevTranslationX = useSharedValue(0);
-    const prevTranslationY = useSharedValue(0);
-    
-    const animatedStyle = useAnimatedStyle(() => ({
-        transform: [
-            { translateX: translationX.value },
-            { translateY: translationY.value },
-        ],
-    }));
-
-    const panGesture = Gesture.Pan()
-        .onStart(() => {
-            prevTranslationX.value = translationX.value;
-            prevTranslationY.value = translationY.value;
-        })
-        .onUpdate((event) => {
-            translationX.value = prevTranslationX.value + event.translationX;
-            translationY.value = prevTranslationY.value + event.translationY;
-        });
-    // if (image) {console.log("Image exists");}
-    // console.log("Name:", name);
-    // console.log("Price:", price);
-    // console.log("Description:", description);
     return (
         <>
             <ScrollView 
@@ -146,24 +115,14 @@ const ListingScreen = ({ navigation, route }) => {
                 </View>
             </ScrollView>
 
-            <Modal 
-                visible={isModalVisible} animationType="slide"
-                onRequestClose={() => setIsModalVisible(false)}  
-                presentationStyle="pageSheet"          
-            >
-                <View style={styles.modalContainer}>
-                    <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-                        <Text style={styles.modalExitButton}>X</Text>
-                    </TouchableOpacity>
-                
-                    
-                    <GestureDetector gesture={panGesture}>
-                        <Animated.View style={animatedStyle}>
-                            <Image source={{ uri: image }} style={styles.image}/>
-                        </Animated.View>
-                    </GestureDetector>
-                </View>
-            </Modal>
+            {isModalVisible && 
+                <ListingModalComponent 
+                    isModalVisible={isModalVisible} 
+                    setIsModalVisible={setIsModalVisible}
+                    image={image}
+                />}
+
+            
         </>
     );
 };
@@ -268,16 +227,5 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.6,
         width: '95%',
         marginTop: 15,
-    },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'black',
-    },
-    modalExitButton: {
-        color: 'white',
-        fontSize: 40,
-        marginTop: 20,
-        marginLeft: 20,
-        marginBottom: 90,
     },
 });
