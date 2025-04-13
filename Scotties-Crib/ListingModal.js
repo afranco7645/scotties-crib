@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Modal, StyleSheet, Text, Image, Dimensions } from 'react-native';
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+
             
 const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
 {
@@ -37,14 +38,23 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
         .onUpdate((event) => {
             if (scale.value > 1) {
                 // console.log("Panning");
-                translationX.value = prevTranslationX.value + event.translationX;
-                translationY.value = prevTranslationY.value + event.translationY;
+                const scaledImageWidth = imageDimensions.width * scale.value;
+                const scaledImageHeight = imageDimensions.height * scale.value;
+
+                const panLimitFactor = 0.8;
+                const maxTranslationX = Math.max((scaledImageWidth - screenWidth) / 2, 0) * panLimitFactor;
+                const maxTranslationY = Math.max((scaledImageHeight - screenHeight) / 2, 0) * panLimitFactor;
+
+                translationX.value = Math.min(
+                Math.max(prevTranslationX.value + event.translationX, -maxTranslationX),
+                maxTranslationX
+            );
+            translationY.value = Math.min(
+                Math.max(prevTranslationY.value + event.translationY, -maxTranslationY),
+                maxTranslationY
+            );
                 // console.log(translationY.value);
             }
-        })
-        .onEnd(() => {
-            translationX.value = 0;
-            translationY.value = 0;
         })
 
     const pinchGesture = Gesture.Pinch()
@@ -54,7 +64,8 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
         .onUpdate((event) => {
             // console.log("Pinching:", event.scale);
             // console.log("Current scale:", scale.value);
-            scale.value = prevScale.value * event.scale;
+            const maxZoom = 3;
+            scale.value = Math.min(prevScale.value * event.scale, maxZoom);
             
         })
         .onEnd(() => {
@@ -63,6 +74,8 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
             if (scale.value < 1) {
                 scale.value = withSpring(1);
                 prevScale.value = withSpring(1);
+                translationX.value = withSpring(0);
+                translationY.value = withSpring(0);
             }
         });
 
@@ -84,11 +97,12 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
             onRequestClose={() => setIsModalVisible(false)}  
             presentationStyle="pageSheet"          
         >
-            <View style={styles.modalContainer}>
-                <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-                    <Text style={styles.modalExitButton}>X</Text>
-                </TouchableOpacity>
-            
+            <View style={styles.container}>
+                <View style={styles.exitContainer}>
+                    <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+                        <Text style={styles.exitText}>X</Text>
+                    </TouchableOpacity>
+                </View>
                 <GestureDetector gesture={combinedGesture}>
                     <Animated.View style={animatedStyle}>
                         <Image source={{ uri: image }} style={styles.image}/>
@@ -102,24 +116,25 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
 
 
 const styles = StyleSheet.create({
-    modalContainer: {
+    container: {
         flex: 1,
         backgroundColor: 'black',
-        borderColor: 'red',
-        borderWidth: 4,
     },
-    modalExitButton: {
+    exitContainer: {
+        // backgroundColor: 'red',
+        width: 60,
+        height: 70,
+        marginBottom: 80,
+    },
+    exitText: {
         color: 'white',
-        fontSize: 40,
-        marginTop: 20,
-        marginLeft: 20,
-        marginBottom: 90,
+        fontSize: 30,
+        marginTop:  15,
+        marginLeft: 15,
     },
     image: {
         width: '100%',
         height: 420,
-        borderColor: 'red',
-        borderWidth: 4,
     },
 });
 

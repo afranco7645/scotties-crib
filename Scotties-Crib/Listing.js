@@ -5,6 +5,7 @@ import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import DropdownComponent from "./DropDown";
 import ListingModalComponent from "./ListingModal";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ListingScreen = ({ navigation, route }) => {
     const { image, name, price, description, sellerEmail } = route.params;
@@ -91,7 +92,7 @@ const ListingScreen = ({ navigation, route }) => {
                         </TouchableOpacity>
                         {isSeller && <View style={styles.dotsContainer}>
                             <TouchableOpacity onPress={deleteListing}>
-                                <Text style={styles.dotsText}>...</Text>
+                                <Icon name="trash-can" size={30} color="#900" style={styles.dotsText}/>
                             </TouchableOpacity>
                         </View>}
                     </View>
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginTop: 10,
         marginLeft: 7,
+        width: "140%",
     },
     dotsContainer: {
         width: '10%',
@@ -220,7 +222,8 @@ const styles = StyleSheet.create({
     },
     dotsText: {
         fontSize: 30,
-        marginLeft: 10,
+        marginLeft: 7,
+        marginTop: 10,
     },
     line: {
         borderBottomColor: 'white',
