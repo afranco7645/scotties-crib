@@ -4,7 +4,7 @@ import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
             
-const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
+const ListingModalComponent = ({ isListingModalVisible, setisListingModalVisible, image }) =>
 {
     const translationX = useSharedValue(0);
     const translationY = useSharedValue(0);
@@ -92,13 +92,13 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
 
     return (
         <Modal 
-            visible={isModalVisible} animationType="slide"
-            onRequestClose={() => setIsModalVisible(false)}  
+            visible={isListingModalVisible} animationType="slide"
+            onRequestClose={() => setisListingModalVisible(false)}  
             presentationStyle="pageSheet"          
         >
             <View style={styles.container}>
                 <View style={styles.exitContainer}>
-                    <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+                    <TouchableOpacity onPress={() => setisListingModalVisible(false)}>
                         <Text style={styles.exitText}>X</Text>
                     </TouchableOpacity>
                 </View>

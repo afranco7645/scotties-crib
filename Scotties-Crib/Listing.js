@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal, Alert } from "react-native";
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import DropdownComponent from "./DropDown";
@@ -15,8 +15,8 @@ const ListingScreen = ({ navigation, route }) => {
     const [profileBio, setProfileBio] = useState('');
     const [isSeller, setIsSeller] = useState(false);
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    
+    const [isListingModalVisible, setisListingModalVisible] = useState(false);
+    const [isDeleteTrue, setIsDeleteTrue] = useState(false);
 
     const fetchSellerInfo = async () => {
         try {
@@ -42,8 +42,17 @@ const ListingScreen = ({ navigation, route }) => {
         }
     };
 
+    const deleteListingAlert = () => {
+        Alert.alert('Delete Listing', 'Are you sure you want to delete this listing?', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log("Delete canceled"),
+              style: 'cancel',
+            },
+            {text: 'Yes', onPress: deleteListing, style: 'destructive'},
+          ]);
+    }
     const deleteListing = async () => {
-        // console.log('delete listing');
         try {
             const existingUsersJson = await AsyncStorage.getItem('users');
             const existingUsers = existingUsersJson ? JSON.parse(existingUsersJson) : [];
@@ -91,14 +100,14 @@ const ListingScreen = ({ navigation, route }) => {
                             <Text style={styles.exitText}>X</Text>
                         </TouchableOpacity>
                         {isSeller && <View style={styles.dotsContainer}>
-                            <TouchableOpacity onPress={deleteListing}>
+                            <TouchableOpacity onPress={deleteListingAlert}>
                                 <Icon name="trash-can" size={30} color="#900" style={styles.dotsText}/>
                             </TouchableOpacity>
                         </View>}
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+                <TouchableOpacity onPress={() => setisListingModalVisible(true)}>
                     <Image source={{ uri: image }} style={styles.image}/>
                 </TouchableOpacity>
 
@@ -119,10 +128,10 @@ const ListingScreen = ({ navigation, route }) => {
                 </View>
             </ScrollView>
 
-            {isModalVisible && 
+            {isListingModalVisible && 
                 <ListingModalComponent 
-                    isModalVisible={isModalVisible} 
-                    setIsModalVisible={setIsModalVisible}
+                    isListingModalVisible={isListingModalVisible} 
+                    setisListingModalVisible={setisListingModalVisible}
                     image={image}
                 />}
 
