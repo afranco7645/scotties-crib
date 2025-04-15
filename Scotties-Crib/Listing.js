@@ -25,12 +25,12 @@ const ListingScreen = ({ navigation, route }) => {
             const seller = users.find(user => user.email === sellerEmail);
 
             const loggedInUserEmail = await AsyncStorage.getItem('loggedInUserEmail');
-            console.log("Logged in user email:", loggedInUserEmail);
-            console.log("Seller Email:", seller.email);
+            // console.log("Logged in user email:", loggedInUserEmail);
+            // console.log("Seller Email:", seller.email);
             // console.log("Seller Image:", seller.image);
             
             if (loggedInUserEmail === seller.email) {
-                console.log("The logged in user is the seller");
+                // console.log("The logged in user is the seller");
                 setIsSeller(true);
             }
             setProfilePic(seller.image);
@@ -97,15 +97,18 @@ const ListingScreen = ({ navigation, route }) => {
                         </View>}
                     </View>
                 </View>
+
                 <TouchableOpacity onPress={() => setIsModalVisible(true)}>
                     <Image source={{ uri: image }} style={styles.image}/>
                 </TouchableOpacity>
+
                 <Text style={styles.name}>{name}</Text>
                 <Text style={styles.price}>${price}</Text>
                 <View style={styles.line}/>
                 <Text style={styles.description}>Description</Text>
                 <Text style={styles.descriptionText}>{description}</Text>
                 <View style={styles.line}/>
+                
                 <Text style={styles.sellerInfo}>Seller Information</Text>
                 <View style={styles.sellerContainer}>
                     <Image source={profilePic === null ? require('./assets/grey_person.jpg') : {uri: profilePic}} style={styles.sellerImage}></Image>
@@ -194,6 +197,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
         marginLeft: 16,
+        marginRight: 90,
     },
     topBar: {
         backgroundColor: 'white',

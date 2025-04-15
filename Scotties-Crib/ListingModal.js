@@ -14,21 +14,23 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
     const scale = useSharedValue(1);
     const prevScale = useSharedValue(1);
 
-    const [imageDimensions, setImageDimensions] = useState({width: 0, height: 0});
+    const imageWidth = 560;
+    const imageHeight = 560;
     const screenWidth = Dimensions.get('screen').width;
     const screenHeight = Dimensions.get('screen').height;
-    // console.log(screenHeight);
-
-    useEffect(() => {
-        if (image) {
-            Image.getSize(
-                image,
-                (width, height) => setImageDimensions({width, height}),
-                (error) => console.error("Failed to get image dimensions:", error)
-            );
-
-        }
-    }, [image]);
+    
+    // const [imageDimensions, setImageDimensions] = useState({width: 0, height: 0});
+    // useEffect(() => {
+    //     if (image) {
+    //         Image.getSize(
+    //             image,
+    //             (width, height) => setImageDimensions({width, height}),
+    //             (error) => console.error("Failed to get image dimensions:", error)
+    //         );
+            
+    //     }
+        
+    // }, [image]);
     
     const panGesture = Gesture.Pan()    
         .onStart(() => {
@@ -37,23 +39,20 @@ const ListingModalComponent = ({ isModalVisible, setIsModalVisible, image }) =>
         })
         .onUpdate((event) => {
             if (scale.value > 1) {
-                // console.log("Panning");
-                const scaledImageWidth = imageDimensions.width * scale.value;
-                const scaledImageHeight = imageDimensions.height * scale.value;
-
+                const scaledImageWidth = imageWidth * scale.value;
+                const scaledImageHeight = imageHeight * scale.value;
                 const panLimitFactor = 0.8;
-                const maxTranslationX = Math.max((scaledImageWidth - screenWidth) / 2, 0) * panLimitFactor;
-                const maxTranslationY = Math.max((scaledImageHeight - screenHeight) / 2, 0) * panLimitFactor;
+                const maxTranslationX = Math.max((scaledImageWidth - screenWidth) / 2, 0);
+                const maxTranslationY = Math.max((scaledImageHeight - screenHeight) / 2, 0);
 
                 translationX.value = Math.min(
                 Math.max(prevTranslationX.value + event.translationX, -maxTranslationX),
                 maxTranslationX
-            );
-            translationY.value = Math.min(
+                );
+                translationY.value = Math.min(
                 Math.max(prevTranslationY.value + event.translationY, -maxTranslationY),
                 maxTranslationY
-            );
-                // console.log(translationY.value);
+                );
             }
         })
 
