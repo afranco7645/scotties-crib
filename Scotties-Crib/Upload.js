@@ -138,18 +138,32 @@ const UploadScreen = ({ navigation, route }) => {
     >
       <ScrollView keyboardDismissMode='interactive'>
         {/* <Text style={styles.welcomeText}>Upload an Image of the Item:</Text> */}
-        {!image && <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
-          <Text style={styles.uploadImageText}>Upload Image</Text>
-          <AntDesign name="picture" size={30} color={'white'}/>
-        </TouchableOpacity>}
+        {!image && <View style={styles.uploadImageContainer}>
+            <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
+              <Text style={styles.uploadImageText}>Upload Image</Text>
+              <AntDesign name="picture" size={30} color={'white'}/>
+            </TouchableOpacity>
+          </View>
+        }
         
-        {image && <TouchableOpacity style={styles.changeImageButton} onPress={pickImage} Text={'Hello'}>
-          <Text>Change Image</Text>
-        </TouchableOpacity>}
-        {image && 
-          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-            <Image source={{ uri: image }} style={styles.image} />
-          </TouchableOpacity>}
+        {image && <>
+            <TouchableOpacity style={styles.changeImageButton} onPress={pickImage} Text={'Hello'}>
+              <Text>Change Image</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+              <View style={styles.exitContainer}>
+                <TouchableOpacity onPress={() => setImage(null)}>
+                  <Text style={styles.exitText}>X</Text>
+                </TouchableOpacity>
+              </View>
+
+              <Image source={{ uri: image }} style={styles.image}/>
+              
+            </TouchableOpacity>
+          </>
+        }
+        
         <Text style={styles.headerText}>Title</Text> 
         <TextInput 
           style={styles.input}
@@ -240,6 +254,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
+  uploadImageContainer: {
+    alignSelf: 'center',
+    width: 200,
+    height: 150,
+    marginTop: 40,
+  },
   uploadImageButton: {
     width: 200,
     height: 150,
@@ -247,7 +267,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     alignSelf: "center",
-    marginTop: 40,
     borderColor: 'gray',
     borderWidth: 1,
   },
@@ -272,6 +291,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 40,
+  },
+  exitContainer: {
+    width: 40,
+    position: "absolute",
+    zIndex: 1,
+  },
+  exitText: {
+    color: 'white',
+    fontSize: 30,
+    marginTop: 7,
+    marginLeft: 7,
   },
 });
 
