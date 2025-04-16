@@ -5,13 +5,17 @@ import { globalStyles } from './styles.js';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import fetchListings from './Home.js'
+import { AntDesign } from 'react-native-vector-icons'
+import ImageModalComponent from './ImageModal.js';
 
 const UploadScreen = ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [sellerEmail, setSellerEmail] = useState('');
+
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const clearListings = async () => {
     try {
@@ -133,12 +137,20 @@ const UploadScreen = ({ navigation, route }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView keyboardDismissMode='interactive'>
-        <Text style={styles.welcomeText}>Upload an Image of the Item:</Text>
-        <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
-          <Text>Upload Image</Text>
-        </TouchableOpacity>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-        <Text style={styles.headerText}>Name</Text> 
+        {/* <Text style={styles.welcomeText}>Upload an Image of the Item:</Text> */}
+        {!image && <TouchableOpacity style={styles.uploadImageButton} onPress={pickImage} Text={'Hello'}>
+          <Text style={styles.uploadImageText}>Upload Image</Text>
+          <AntDesign name="picture" size={30} color={'white'}/>
+        </TouchableOpacity>}
+        
+        {image && <TouchableOpacity style={styles.changeImageButton} onPress={pickImage} Text={'Hello'}>
+          <Text>Change Image</Text>
+        </TouchableOpacity>}
+        {image && 
+          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+            <Image source={{ uri: image }} style={styles.image} />
+          </TouchableOpacity>}
+        <Text style={styles.headerText}>Title</Text> 
         <TextInput 
           style={styles.input}
           value={name}
@@ -146,7 +158,7 @@ const UploadScreen = ({ navigation, route }) => {
           placeholder='Name'
           placeholderTextColor={'#A9A9A9'}
         />
-        <Text style={styles.headerText}>Price:</Text>
+        <Text style={styles.headerText}>Price</Text>
         <TextInput
           style={styles.input}
           value={price}
@@ -155,7 +167,7 @@ const UploadScreen = ({ navigation, route }) => {
           keyboardType="numeric"
           placeholderTextColor={'#A9A9A9'}
         />
-        <Text style={styles.headerText}>Item Description:</Text>
+        <Text style={styles.headerText}>Item Description</Text>
         <TextInput
             style={[styles.input, styles.descriptionInput]}
             value={description}
@@ -164,14 +176,22 @@ const UploadScreen = ({ navigation, route }) => {
             multiline={true}
             placeholderTextColor={'#A9A9A9'}
         />
-        <TouchableOpacity style={styles.uploadImageButton} onPress={handleUpload}>
+        <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
           <Text>Upload</Text>
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={clearListings} style={styles.uploadImageButton}>
           <Text>Clear Listings</Text>
         </TouchableOpacity> */}
       </ScrollView>
+
+      <ImageModalComponent
+        isImageModalVisible={isModalVisible}
+        setIsImageModalVisible={setIsModalVisible}
+        image={image}  
+      />
+
     </KeyboardAvoidingView>
+
   );
 };
 
@@ -212,13 +232,29 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginBottom: 10,
   },
-  uploadImageButton: {
+  uploadButton: {
     width: '100%',
     backgroundColor: '#97c4e1',
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
+  },
+  uploadImageButton: {
+    width: 200,
+    height: 150,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    alignSelf: "center",
+    marginTop: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  uploadImageText: {
+    color: 'white',
+    fontSize: 20,
+    marginTop: 35,
   },
   button: {
     width: '80%',
@@ -228,6 +264,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     justifyContent: 'center',
+  },
+  changeImageButton: {
+    width: '100%',
+    backgroundColor: '#97c4e1',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 40,
   },
 });
 

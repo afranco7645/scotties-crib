@@ -1,10 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal, Alert } from "react-native";
-import { Gesture, GestureDetector, } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
-import DropdownComponent from "./DropDown";
-import ListingModalComponent from "./ListingModal";
+import ImageModalComponent from "./ImageModal";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ListingScreen = ({ navigation, route }) => {
@@ -15,7 +12,7 @@ const ListingScreen = ({ navigation, route }) => {
     const [profileBio, setProfileBio] = useState('');
     const [isSeller, setIsSeller] = useState(false);
 
-    const [isListingModalVisible, setisListingModalVisible] = useState(false);
+    const [isImageModalVisible, setIsImageModalVisible] = useState(false);
     const [isDeleteTrue, setIsDeleteTrue] = useState(false);
 
     const fetchSellerInfo = async () => {
@@ -89,7 +86,7 @@ const ListingScreen = ({ navigation, route }) => {
 
     return (
         <>
-            <ScrollView 
+            <View 
                 style={styles.container} 
                 contentContainerStyle={{justifyContent: 'center'}}
                 stickyHeaderIndices={[0]}
@@ -107,31 +104,33 @@ const ListingScreen = ({ navigation, route }) => {
                     </View>
                 </View>
 
-                <TouchableOpacity onPress={() => setisListingModalVisible(true)}>
-                    <Image source={{ uri: image }} style={styles.image}/>
-                </TouchableOpacity>
-
-                <Text style={styles.name}>{name}</Text>
-                <Text style={styles.price}>${price}</Text>
-                <View style={styles.line}/>
-                <Text style={styles.description}>Description</Text>
-                <Text style={styles.descriptionText}>{description}</Text>
-                <View style={styles.line}/>
-                
-                <Text style={styles.sellerInfo}>Seller Information</Text>
-                <View style={styles.sellerContainer}>
-                    <Image source={profilePic === null ? require('./assets/grey_person.jpg') : {uri: profilePic}} style={styles.sellerImage}></Image>
-                    <View>
-                        <Text style={styles.sellerName}>{profileName}</Text>
-                        <Text style={styles.sellerBio}>{profileBio}</Text>
+                <ScrollView>
+                    <TouchableOpacity onPress={() => setIsImageModalVisible(true)}>
+                        <Image source={{ uri: image }} style={styles.image}/>
+                    </TouchableOpacity>
+                    
+                    <Text style={styles.name}>{name}</Text>
+                    <Text style={styles.price}>${price}</Text>
+                    <View style={styles.line}/>
+                    <Text style={styles.description}>Description</Text>
+                    <Text style={styles.descriptionText}>{description}</Text>
+                    <View style={styles.line}/>
+                    
+                    <Text style={styles.sellerInfo}>Seller Information</Text>
+                    <View style={styles.sellerContainer}>
+                        <Image source={profilePic === null ? require('./assets/grey_person.jpg') : {uri: profilePic}} style={styles.sellerImage}></Image>
+                        <View>
+                            <Text style={styles.sellerName}>{profileName}</Text>
+                            <Text style={styles.sellerBio}>{profileBio}</Text>
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </View>
 
-            {isListingModalVisible && 
-                <ListingModalComponent 
-                    isListingModalVisible={isListingModalVisible} 
-                    setisListingModalVisible={setisListingModalVisible}
+            {isImageModalVisible && 
+                <ImageModalComponent 
+                    isImageModalVisible={isImageModalVisible} 
+                    setIsImageModalVisible={setIsImageModalVisible}
                     image={image}
                 />}
 
@@ -210,17 +209,16 @@ const styles = StyleSheet.create({
     },
     topBar: {
         backgroundColor: 'white',
-        height: 110,
+        height: 80,
         width: '100%',
     },
     exitContainer: {
         color: 'black',
         flexDirection: 'row',
         borderRadius: 10,
-        height: '45%',
         width: "100%",
         marginLeft: 15,
-        marginTop: 55,
+        marginTop: 20,
         fontFamily: "Roboto",
     },
     exitText: {

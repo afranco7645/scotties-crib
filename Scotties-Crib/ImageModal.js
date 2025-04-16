@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Modal, StyleSheet, Text, Image, Dimensions } from 'react-native';
 import { Gesture, GestureDetector, } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 
             
-const ListingModalComponent = ({ isListingModalVisible, setisListingModalVisible, image }) =>
+const ImageModalComponent = ({ isImageModalVisible, setIsImageModalVisible, image }) =>
 {
     const translationX = useSharedValue(0);
     const translationY = useSharedValue(0);
@@ -41,7 +40,6 @@ const ListingModalComponent = ({ isListingModalVisible, setisListingModalVisible
             if (scale.value > 1) {
                 const scaledImageWidth = imageWidth * scale.value;
                 const scaledImageHeight = imageHeight * scale.value;
-                const panLimitFactor = 0.8;
                 const maxTranslationX = Math.max((scaledImageWidth - screenWidth) / 2, 0);
                 const maxTranslationY = Math.max((scaledImageHeight - screenHeight) / 2, 0);
 
@@ -92,13 +90,13 @@ const ListingModalComponent = ({ isListingModalVisible, setisListingModalVisible
 
     return (
         <Modal 
-            visible={isListingModalVisible} animationType="slide"
-            onRequestClose={() => setisListingModalVisible(false)}  
+            visible={isImageModalVisible} animationType="slide"
+            onRequestClose={() => setIsImageModalVisible(false)}  
             presentationStyle="pageSheet"          
         >
             <View style={styles.container}>
                 <View style={styles.exitContainer}>
-                    <TouchableOpacity onPress={() => setisListingModalVisible(false)}>
+                    <TouchableOpacity onPress={() => setIsImageModalVisible(false)}>
                         <Text style={styles.exitText}>X</Text>
                     </TouchableOpacity>
                 </View>
@@ -137,4 +135,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListingModalComponent;
+export default ImageModalComponent;

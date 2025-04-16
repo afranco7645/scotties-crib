@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Image, Text, Dimensions, Touchable, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SearchBar from './searchBar';
 
-const windowWidth = Dimensions.get('window').width;
 
 const HomeScreen = ({navigation, route}) => {
   const [listings, setListings] = useState([]);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './Login';
@@ -11,18 +12,17 @@ import ResetPassword from './ResetPassword';
 import NavBar from './NavBar';
 import ListingScreen from './Listing';
 import DropdownComponent from './DropDown';
-import { Dropdown } from 'react-native-element-dropdown';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
+      <StatusBar/>
       <Stack.Navigator
         initialRouteName="HomeWithNavBar"
         screenOptions={{
           gestureEnabled: true,
-          gestureDirection: 'horizontal', 
           animationTypeForReplace: 'pop', 
         }}
       >
@@ -86,6 +86,7 @@ export default function App() {
           name="Listing"
           component={ListingScreen}
           options={{
+            presentation: 'modal',
             headerShown: false,
           }}
         />

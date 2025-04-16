@@ -34,11 +34,15 @@ const NavBar = () => {
           null,
         ],
         headerShown: false,
+        "tabBarActiveTintColor": "#FFE082",
+        "tabBarInactiveTintColor": "#0b2138",
+        "tabBarStyle": [
+          {
+            "display": "flex"
+          },
+    null
+  ]
       })}
-      tabBarOptions={{
-        activeTintColor: '#FFE082', // Change the active tab color
-        inactiveTintColor: '#0b2138', // Change the inactive tab color
-      }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Upload" component={UploadScreen} />
