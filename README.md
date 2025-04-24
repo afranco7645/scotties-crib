@@ -13,6 +13,7 @@
 ### Languages/Frameworks/Libraries
 * JavaScript
 * React Native
+* Node.js
 * Expo-cli
 ### Dependencies
 * `react-native`
