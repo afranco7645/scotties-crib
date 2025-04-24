@@ -4,13 +4,6 @@
 
 
 # Scotties Crib: A Marketplace for UCR students
-### Authors:
-- Joshua Shabun: jshab003@ucr.edu
-- Peter Lu: plu040@ucr.edu 
-- Jenny Quan: jquan026@ucr.edu
-- Adrian Franco: afran111@ucr.edu
-- Ashley Bautista: abaut047@ucr.edu
-- Luke Nguyen lnguy353@ucr.edu
 
 > A marketplace app coming soon 
 
