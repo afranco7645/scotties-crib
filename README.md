@@ -13,8 +13,7 @@
 ### Languages/Frameworks/Libraries
 * JavaScript
 * React Native
-* Expo
-* Cocoapods
+* Expo-cli
 ### Dependencies
 * `react-native`
 * `react-native-async-storage`
